@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ product.name }}</title>
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{ product.name }}</h1>
+      <img
+        src="{{ product.image.url }}"
+        alt="{{ product.name }}"
+        class="product-image"
+      />
+      <p>{{ product.description }}</p>
+      <p class="price">Prix : ${{ product.price }}</p>
+
+      <!-- Affichage des commentaires -->
+      <div class="comments-section">
+        <h2>Commentaires</h2>
+        {% for comment in comments %}
+        <div class="comment">
+          <p class="comment-author">
+            <strong>{{ comment.user_name }}</strong> -
+            <span class="comment-date"
+              >{{ comment.created_at|date:"d/m/Y H:i" }}</span
+            >
+          </p>
+          <p class="comment-rating"></p>
+
+          <p class="comment-text">{{ comment.content }}</p>
+        </div>
+        {% empty %}
+        <p>Aucun commentaire pour ce produit.</p>
+        {% endfor %}
+      </div>
+
+      <!-- Bouton "Retour" -->
+      <a href="javascript:history.back()" class="back-button">Retour</a>
+    </div>
+  </body>
+</html>
