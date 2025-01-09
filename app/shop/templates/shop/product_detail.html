@@ -29,14 +29,33 @@
               >{{ comment.created_at|date:"d/m/Y H:i" }}</span
             >
           </p>
-          <p class="comment-rating"></p>
-
+          <p class="comment-rating">{{ comment.rating_display }}</p>
           <p class="comment-text">{{ comment.content }}</p>
         </div>
         {% empty %}
         <p>Aucun commentaire pour ce produit.</p>
         {% endfor %}
       </div>
+
+      <!-- Formulaire d'ajout de commentaire -->
+      {% if user.is_authenticated %}
+      <h3>Ajouter un commentaire</h3>
+      <form method="POST">
+        {% csrf_token %} {{ comment_form.as_p }} {% if comment_form.errors %}
+        <div class="form-errors">
+          {% for field in comment_form %} {% for error in field.errors %}
+          <p class="error">{{ error }}</p>
+          {% endfor %} {% endfor %}
+        </div>
+        {% endif %}
+        <button type="submit">Ajouter le commentaire</button>
+      </form>
+      {% else %}
+      <p>
+        Vous devez être connecté pour ajouter un commentaire.
+        <a href="{% url 'login' %}">Se connecter</a>
+      </p>
+      {% endif %}
 
       <!-- Bouton "Retour" -->
       <a href="javascript:history.back()" class="back-button">Retour</a>

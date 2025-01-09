@@ -8,6 +8,18 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
   </head>
   <body>
+    <header>
+      {% if user.is_authenticated %}
+      <p>Salut, {{ user.username }}!</p>
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Se déconnecter</button>
+      </form>
+      {% else %}
+      <a href="{% url 'login' %}">Se connecter</a>
+      {% endif %}
+    </header>
+
     <h1>Nos Produits</h1>
 
     <div class="product-list">
