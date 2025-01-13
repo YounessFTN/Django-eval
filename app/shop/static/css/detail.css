@@ -206,3 +206,6 @@ form button:disabled {
 .comments-section {
   margin-top: 40px;
 }
+.view-basket-button {
+  background-color: red;
+}

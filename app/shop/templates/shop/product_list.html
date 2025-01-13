@@ -40,3 +40,161 @@
     </div>
   </body>
 </html>
+<style>
+  /* Reset CSS */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", system-ui, sans-serif;
+  }
+
+  body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  /* Header Styles */
+  header {
+    background-color: #ffffff;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  header p {
+    margin: 0;
+    color: #2d3748;
+  }
+
+  header button,
+  header a {
+    background-color: #4a5568;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  header button:hover,
+  header a:hover {
+    background-color: #2d3748;
+  }
+
+  /* Main Title */
+  h1 {
+    text-align: center;
+    color: #2d3748;
+    font-size: 2.5rem;
+    margin: 2rem 0;
+    font-weight: 700;
+  }
+
+  /* Product List Grid */
+  .product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* Product Card Styles */
+  .product-list a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .product {
+    background-color: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .product h2 {
+    font-size: 1.25rem;
+    color: #2d3748;
+    padding: 1rem;
+    margin: 0;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .product-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #4a5568;
+    padding: 0.5rem 1rem;
+  }
+
+  .product p {
+    padding: 0 1rem 1rem;
+    color: #718096;
+    font-size: 0.875rem;
+    flex-grow: 1;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    header {
+      padding: 1rem;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 1.5rem 0;
+    }
+
+    .product-list {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      padding: 1rem;
+      gap: 1rem;
+    }
+
+    .product-image {
+      height: 180px;
+    }
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .product {
+    animation: fadeIn 0.5s ease-out;
+  }
+</style>

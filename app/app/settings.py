@@ -27,6 +27,7 @@ DJANGO_APPS = [
 ]
 CUSTOM_APPS = [
     'shop',
+    'basket',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS

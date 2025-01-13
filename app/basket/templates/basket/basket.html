@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mon panier</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+        text-align: center;
+      }
+
+      .cart-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+      }
+
+      .cart-table th {
+        background-color: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        border-bottom: 2px solid #dee2e6;
+        color: #495057;
+      }
+
+      .cart-table td {
+        padding: 15px;
+        border-bottom: 1px solid #dee2e6;
+        vertical-align: middle;
+      }
+
+      .product-cell {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+      }
+
+      .product-name {
+        font-weight: 500;
+        color: #333;
+      }
+
+      .quantity-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .quantity-btn {
+        background-color: #e9ecef;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .quantity-btn:hover {
+        background-color: #dee2e6;
+      }
+
+      .quantity {
+        font-weight: 500;
+        width: 40px;
+        text-align: center;
+      }
+
+      .total-section {
+        text-align: right;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        margin-top: 20px;
+      }
+
+      .total-amount {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .stripe-button {
+        background-color: #635bff;
+        color: white;
+        padding: 15px 30px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto;
+      }
+
+      .stripe-button:hover {
+        background-color: #4b45c6;
+      }
+
+      .empty-cart {
+        text-align: center;
+        padding: 50px;
+        color: #6c757d;
+        font-size: 1.2em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Votre panier</h1>
+
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th>Produit</th>
+            <th>Quantité</th>
+            <th>Prix</th>
+            <th>Sous-total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in basket_items %}
+          <tr>
+            <td>
+              <div class="product-cell">
+                <img
+                  src="{{ item.product.image.url }}"
+                  alt="{{ item.product.name }}"
+                  class="product-image"
+                />
+                <span class="product-name">{{ item.product.name }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="quantity-cell">
+                <button
+                  class="quantity-btn"
+                  onclick="changeQuantity({{ item.id }}, 'decrease')"
+                >
+                  -
+                </button>
+                <span class="quantity" id="quantity-{{ item.id }}"
+                  >{{ item.quantity }}</span
+                >
+                <button
+                  class="quantity-btn"
+                  onclick="changeQuantity({{ item.id }}, 'increase')"
+                >
+                  +
+                </button>
+              </div>
+            </td>
+            <td>{{ item.product.price }} €</td>
+            <td id="subtotal-{{ item.id }}">{{ item.subtotal }} €</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="empty-cart">
+              <i
+                class="fas fa-shopping-cart"
+                style="font-size: 3em; margin-bottom: 20px"
+              ></i>
+              <p>Votre panier est vide.</p>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="total-section">
+        <div class="total-amount">
+          Total : <span id="total-amount">{{ total }} €</span>
+        </div>
+        <button class="stripe-button" onclick="redirectToStripe()">
+          <i class="fab fa-stripe"></i>
+          Payer avec Stripe
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function changeQuantity(itemId, action) {
+        const quantityElement = document.getElementById("quantity-" + itemId);
+        const subtotalElement = document.getElementById("subtotal-" + itemId);
+        let quantity = parseInt(quantityElement.textContent);
+        const price = parseFloat(subtotalElement.textContent) / quantity;
+
+        if (action === "increase") {
+          quantity++;
+        } else if (action === "decrease" && quantity > 1) {
+          quantity--;
+        }
+
+        quantityElement.textContent = quantity;
+        subtotalElement.textContent = (price * quantity).toFixed(2) + " €";
+
+        updateTotal();
+      }
+
+      function updateTotal() {
+        let total = 0;
+        const subtotals = document.querySelectorAll('[id^="subtotal-"]');
+        subtotals.forEach((subtotal) => {
+          total += parseFloat(subtotal.textContent.replace(" €", ""));
+        });
+        document.getElementById("total-amount").textContent =
+          total.toFixed(2) + " €";
+      }
+
+      function redirectToStripe() {
+        // Remplacez cette URL par votre endpoint Stripe
+        window.location.href = "/create-checkout-session/";
+      }
+    </script>
+  </body>
+</html>
